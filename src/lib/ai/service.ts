@@ -10,6 +10,19 @@ export const unavailableInformationAnswer = "Informasi tersebut belum tersedia d
 const latestNewsQuestion = /\b(berita|kabar|informasi)\b.*\b(terbaru|terkini)\w*\b|\b(terbaru|terkini)\w*\b.*\b(berita|kabar|informasi)\b/i;
 
 function latestNewsResponse(): ConciergeResponse | null {
+  const newestArticle = schoolContent.articles
+    .filter((article) => article.publishedAt && !Number.isNaN(Date.parse(article.publishedAt)))
+    .sort((left, right) => Date.parse(right.publishedAt!) - Date.parse(left.publishedAt!))[0];
+  if (newestArticle?.publishedAt) {
+    const publishedAt = new Intl.DateTimeFormat("id-ID", { dateStyle: "long", timeZone: "Asia/Jakarta" }).format(new Date(newestArticle.publishedAt));
+    return {
+      answer: `Berita terbaru yang tersedia di website Perwanida adalah “${newestArticle.title}”, diterbitkan pada ${publishedAt}.`,
+      sources: [{ title: newestArticle.title, href: newestArticle.relatedPage }],
+      fallback: false,
+      suggestedActions: [],
+    };
+  }
+
   const datedGalleryItem = schoolContent.gallery.find((item) => /\b(januari|februari|maret|april|mei|juni|juli|agustus|september|oktober|november|desember)\s+\d{4}\b/i.test(item.title));
   if (!datedGalleryItem) return null;
 
