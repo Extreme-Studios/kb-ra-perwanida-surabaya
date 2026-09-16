@@ -7,6 +7,20 @@ import type { AIProvider, ConciergeHistoryItem, ConciergeResponse } from "./type
 export const unavailableAnswer = "Maaf, Sahabat Perwanida sedang tidak dapat menjawab. Anda tetap dapat mencari informasi melalui menu website atau menghubungi sekolah.";
 export const unavailableInformationAnswer = "Informasi tersebut belum tersedia di website Perwanida.";
 
+const latestNewsQuestion = /\b(berita|kabar|informasi)\b.*\b(terbaru|terkini)\w*\b|\b(terbaru|terkini)\w*\b.*\b(berita|kabar|informasi)\b/i;
+
+function latestNewsResponse(): ConciergeResponse | null {
+  const datedGalleryItem = schoolContent.gallery.find((item) => /\b(januari|februari|maret|april|mei|juni|juli|agustus|september|oktober|november|desember)\s+\d{4}\b/i.test(item.title));
+  if (!datedGalleryItem) return null;
+
+  return {
+    answer: `Saat ini belum ada artikel berita yang dipublikasikan di website Perwanida. Konten kegiatan yang memiliki penanda waktu terbaru di website adalah “${datedGalleryItem.title}”. Tanggal hari tidak tercantum pada sumber, sehingga yang dapat dipastikan adalah ${datedGalleryItem.title.replace(/^EVENT\s+/i, "")}.`,
+    sources: [{ title: "Galeri", href: datedGalleryItem.relatedPage }],
+    fallback: false,
+    suggestedActions: [],
+  };
+}
+
 function adminAction() {
   return schoolContent.contact.whatsappUrl ? [{ label: "Hubungi Admin Perwanida", href: schoolContent.contact.whatsappUrl }] : [];
 }
@@ -21,6 +35,10 @@ export interface ConciergeServiceOptions { provider?: AIProvider | null }
 export async function answerConcierge(message: string, history: readonly ConciergeHistoryItem[], options: ConciergeServiceOptions = {}): Promise<ConciergeResponse> {
   if (isUnsafeConciergeRequest(message)) {
     return { answer: unavailableInformationAnswer, sources: [], fallback: true, suggestedActions: adminAction() };
+  }
+  if (latestNewsQuestion.test(message)) {
+    const response = latestNewsResponse();
+    if (response) return response;
   }
   const retrieval = retrieveKnowledge(message);
   if (!retrieval.documents.length) {

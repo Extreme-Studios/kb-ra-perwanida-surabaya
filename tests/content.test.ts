@@ -132,6 +132,15 @@ test("Concierge service makes admissions verification deterministic",async()=>{
   assert.equal(answer.fallback,false);
   assert.ok(answer.answer.includes(schoolContent.admissions.verificationNote!));
 });
+test("Concierge reports the newest dated website content without inventing a news article",async()=>{
+  let calls=0;
+  const answer=await answerConcierge("Apa informasi terbarunya?",[],{provider:{generateAnswer:async()=>{calls++;return "Tidak boleh dipakai";}}});
+  assert.equal(answer.fallback,false);
+  assert.equal(calls,0);
+  assert.match(answer.answer,/belum ada artikel berita/i);
+  assert.match(answer.answer,/EVENT FEBRUARI 2025/i);
+  assert.equal(answer.sources[0]?.href,"/galeri");
+});
 test("Rate-limit fallback is bounded, cleaned per window, and never retains a raw client key",()=>{
   const store=new MemoryRateLimitStore({windowMs:100,maxRequests:2});
   assert.equal(store.check("opaque",0),true);assert.equal(store.check("opaque",1),true);assert.equal(store.check("opaque",2),false);
