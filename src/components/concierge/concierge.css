@@ -1,0 +1,28 @@
+.concierge { position: fixed; right: max(18px, env(safe-area-inset-right)); bottom: max(18px, env(safe-area-inset-bottom)); z-index: 60; }
+.concierge-trigger { display: inline-flex; min-height: 48px; align-items: center; gap: 9px; padding: 10px 17px; border: 1px solid rgba(255,255,255,.65); border-radius: 999px; background: var(--color-primary); color: var(--color-white); box-shadow: 0 12px 30px rgba(19,76,57,.28); font-size: .8125rem; font-weight: 700; }
+.concierge-trigger:hover { background: var(--color-primary-dark); transform: translateY(-2px); }
+.concierge-dialog { width: min(410px, calc(100vw - 32px)); height: min(680px, calc(100dvh - 32px)); margin: auto 16px 16px auto; padding: 0; border: 1px solid var(--color-border); border-radius: 22px; background: var(--color-surface); color: var(--color-text); box-shadow: 0 22px 70px rgba(24,45,38,.28); overflow: hidden; }
+.concierge-dialog::backdrop { background: transparent; }
+.concierge-panel { height: 100%; display: grid; grid-template-rows: auto minmax(0,1fr) auto auto auto; }
+.concierge-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 19px 20px; background: var(--color-primary); color: var(--color-white); }
+.concierge-header p { font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; opacity: .82; }
+.concierge-header h2 { margin-top: 2px; font-size: 1.25rem; letter-spacing: -.03em; }
+.concierge-close { width: 42px; height: 42px; border: 1px solid rgba(255,255,255,.45); border-radius: 50%; background: transparent; color: var(--color-white); font-size: 1.75rem; line-height: 1; }
+.concierge-thread { min-height: 0; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 12px; background: var(--color-surface-soft); }
+.concierge-message { width: fit-content; max-width: 91%; padding: 11px 13px; border-radius: 15px; font-size: .84rem; line-height: 1.55; white-space: pre-line; box-shadow: 0 1px 0 rgba(20,66,50,.08); }
+.concierge-message--assistant { align-self: flex-start; background: var(--color-white); border-bottom-left-radius: 4px; }
+.concierge-message--user { align-self: flex-end; background: var(--color-primary); color: var(--color-white); border-bottom-right-radius: 4px; }
+.concierge-sources { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; padding-top: 9px; border-top: 1px solid var(--color-border); }
+.concierge-sources span { width: 100%; color: var(--color-text-muted); font-size: .68rem; font-weight: 700; }
+.concierge-sources a, .concierge-admin { display: inline-flex; align-items: center; min-height: 30px; padding: 3px 8px; border: 1px solid var(--color-border-strong); border-radius: 999px; color: var(--color-primary); font-size: .68rem; font-weight: 700; line-height: 1.25; }
+.concierge-admin { margin-top: 10px; background: var(--color-accent-soft); }
+.concierge-thinking { align-self: flex-start; color: var(--color-text-muted); font-size: .75rem; font-style: italic; }
+.concierge-quick { display: flex; gap: 7px; overflow-x: auto; padding: 11px 14px; border-top: 1px solid var(--color-border); background: var(--color-white); scrollbar-width: thin; }
+.concierge-quick button { flex: 0 0 auto; min-height: 34px; padding: 5px 9px; border: 1px solid var(--color-border); border-radius: 999px; background: var(--color-surface); color: var(--color-primary); font-size: .68rem; font-weight: 700; }
+.concierge-composer { display: flex; gap: 8px; padding: 12px 14px 8px; background: var(--color-white); }
+.concierge-composer input { min-width: 0; flex: 1; min-height: 44px; padding: 8px 11px; border: 1px solid var(--color-border-strong); border-radius: 10px; background: var(--color-surface); color: var(--color-text); font-size: .82rem; }
+.concierge-composer button { min-height: 44px; padding: 8px 12px; border: 0; border-radius: 10px; background: var(--color-primary); color: var(--color-white); font-size: .78rem; font-weight: 700; }
+.concierge-disclosure { padding: 0 15px max(13px, env(safe-area-inset-bottom)); background: var(--color-white); color: var(--color-text-muted); font-size: .64rem; line-height: 1.35; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+@media (max-width: 639px) { .concierge { right: max(12px, env(safe-area-inset-right)); bottom: max(12px, env(safe-area-inset-bottom)); } .concierge-dialog { width: 100vw; height: min(92dvh, 760px); max-height: 92dvh; margin: auto 0 0; border-radius: 22px 22px 0 0; border-bottom: 0; } .concierge-dialog::backdrop { background: rgba(18,45,35,.28); } .concierge-message { max-width: 94%; } }
+@media (prefers-reduced-motion: reduce) { .concierge-trigger:hover { transform: none; } }
