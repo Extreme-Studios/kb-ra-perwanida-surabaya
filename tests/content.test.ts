@@ -107,6 +107,8 @@ test("Local concierge retrieval resolves mandatory public school topics",()=>{
     const result=retrieveKnowledge(query);
     assert.ok(matcher(result.documents.map(document=>document.id)),query);
   }
+  const featured=retrieveKnowledge("Program unggulan apa saja");
+  assert.deepEqual(featured.documents.map(document=>document.id),schoolContent.programs.filter(program=>program.kind==="featured").map(program=>program.id));
   assert.ok(retrieveKnowledge("SPMB masih buka?").documents.some(document=>document.needsVerification));
 });
 test("Local concierge retrieval refuses unavailable and out-of-scope topics",()=>{

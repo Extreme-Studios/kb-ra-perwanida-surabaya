@@ -4,7 +4,7 @@ Tanggal final: 15 September 2026.
 
 ## 1. Audit summary
 
-Project Next.js 16.3.5 memakai content server-rendered, empat client boundary yang memang interaktif, local `next/image`, font self-hosted, route Node untuk concierge, root entrance terpisah dan website utama di `/home`. Project bukan Git repository; tidak diinisialisasi atau dipush.
+Project Next.js 16.3.5 memakai content server-rendered, empat client boundary yang memang interaktif, local `next/image`, font self-hosted, route Node untuk concierge, root entrance terpisah dan website utama di `/home`. Root `/` adalah interactive entrance; `/home` tetap sengaja tersedia sebagai halaman website utama. Source sudah berada pada repository GitHub private dan deployment production telah diverifikasi.
 
 ## 2. Security changes
 
@@ -72,4 +72,4 @@ Node 20+, Next.js server runtime, image optimization, environment secret store d
 
 ## 18. Release status
 
-**READY FOR DEPLOYMENT.** Tidak ada blocker kritis pada source/build/security test/live Gemini verification. Sebelum publish, operator harus menyelesaikan item domain, environment, content confirmation, limiter hosting dan Lighthouse production pada [PRODUCTION-CHECKLIST.md](./PRODUCTION-CHECKLIST.md). Tidak ada deployment, perubahan domain atau aktivasi indexing yang dilakukan.
+**DEPLOYED — INDEXING DISABLED.** Production aktif di `https://kb-ra-perwanida-surabaya.vercel.app/`; URL root membuka interactive entrance dan `/home` adalah website utama. `GEMINI_API_KEY` dan `GEMINI_MODEL` dikonfigurasi server-side, `SITE_URL` memakai hostname production, dan Gemini production telah diverifikasi. `ALLOW_INDEXING=false` tetap dipertahankan. Item operasional tersisa: konfirmasi konten sekolah, limiter distributed bila diperlukan, dan Lighthouse production pada [PRODUCTION-CHECKLIST.md](./PRODUCTION-CHECKLIST.md).

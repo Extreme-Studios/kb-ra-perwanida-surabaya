@@ -37,6 +37,7 @@ const aliases: Record<string, readonly string[]> = {
 const unsupportedTopics = /\b(biaya|harga|tarif|bayar|pembayaran|uang\s+(masuk|gedung|sekolah))\b/i;
 const outOfScopeTopics = /\b(cuaca|ramalan|saham|kripto|politik|resep|permainan)\b/i;
 const unsafeRequest = /\b(system\s*prompt|ignore\s+(all|previous)|api\s*key|kunci\s*api|developer\s*message|instruksi\s*(rahasia|sistem)|jailbreak)\b/i;
+const featuredProgramQuestion = /\b(program\s+unggulan|unggulan)\b/i;
 
 function normalized(value: string) {
   return value
@@ -95,10 +96,18 @@ export function retrieveKnowledge(query: string, limit = 6): RetrievalResult {
   const directWords = tokens(query);
   const queryWords = queryTokens(query);
   if (!queryWords.length) return { documents: [], normalizedQuery };
+  const knowledgeDocuments = toKnowledgeDocuments(schoolContent).filter((document) => document.id !== schoolContent.identity.id);
+  if (featuredProgramQuestion.test(query)) {
+    const featuredIds = new Set(schoolContent.programs.filter((program) => program.kind === "featured").map((program) => program.id));
+    const documents = knowledgeDocuments
+      .filter((document) => featuredIds.has(document.id))
+      .map((document, index) => ({ ...document, score: 100 - index }))
+      .slice(0, limit);
+    return { documents, normalizedQuery };
+  }
   const peopleQuestion = /\b(guru|ustadz|ustadzah|pengajar|pendidik)\b/i.test(query);
 
-  const documents = toKnowledgeDocuments(schoolContent)
-    .filter((document) => document.id !== schoolContent.identity.id)
+  const documents = knowledgeDocuments
     .filter((document) => !peopleQuestion || document.category === "pendidik" || document.category === "tenaga-kependidikan")
     .map((document) => ({ ...document, score: scoreDocument(document, query, queryWords) }))
     .filter((document) => {
