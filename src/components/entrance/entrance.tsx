@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState, useSyncExternalStore, type FormEvent } from "react";
 import { entranceCopy as copy, entranceTiming, type EntranceData, type EntranceHotspot } from "@/data/content/entrance";
 import "./entrance.css";
+import { DemoBanner } from "@/components/layout/demo-banner";
 
 const subscribe=()=>()=>{};
 export function Entrance({data}:{data:EntranceData}) {
@@ -34,6 +35,7 @@ export function Entrance({data}:{data:EntranceData}) {
   }
   function close(){dialog.current?.close();setActive(null);opener.current?.focus();}
   return <main className="entrance" data-entering={entering} aria-labelledby="entrance-title">
+    <DemoBanner />
     <header className="entrance-header">
       <div className="entrance-brand">{data.logo.src&&<Image src={data.logo.src} alt={data.logo.alt} width={52} height={52} sizes="52px"/>}<span>{data.shortName}<small>{data.city}</small></span></div>
       <a className="entrance-direct" href={data.homeHref}>{copy.direct}<span aria-hidden="true">↗</span></a>
